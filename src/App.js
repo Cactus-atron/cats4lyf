@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import faker from 'faker'
 
-function App() {
+import { Api } from './api'
+
+const App = () => {
+  const [breeds, setBreeds] = useState([])
+
+  useEffect(() => {
+    Api.getBreedIds().then(arr => setBreeds(arr))
+  }, [])
+
+  const getCat = async () => {
+    if (!breeds || breeds.length === 0) return
+
+    const breedId = breeds[Math.floor(Math.random() * breeds.length)]
+    const cat = await Api.getCatByBreed(breedId)
+
+    cat.price = Math.floor(Math.random() * 100)
+    cat.name = faker.name.findName()
+    cat.email = faker.internet.email()
+    cat.job = faker.name.jobTitle()
+    cat.gender = faker.name.gender()
+
+    return cat
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={() => getCat().then(cat => console.log(cat))}>Log a cat to console</button>
     </div>
-  );
+  ) 
 }
 
-export default App;
+export default App
