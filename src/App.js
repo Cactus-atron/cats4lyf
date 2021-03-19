@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import faker from 'faker'
+import { Route } from 'react-router-dom'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import { ProductList } from './components/productList'
+import { Basket } from './components/basket'
+import { Profile } from './components/profile'
+import { FaCat } from 'react-icons/fa'
 
 import { Api } from './api'
 
@@ -13,47 +20,50 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    getCats(10).then(arr => {
-      setProducts(arr)
-      console.log(arr)
-    })
+    refreshStock()
   }, [breedIds])
 
-
-  const getCats = async (number) => {
-    if (!breedIds || breedIds.length === 0) return
-
-    let catArr = []
-
-    for (let i = 0; i < number; i++) {
-      const breedId = breedIds[Math.floor(Math.random() * breedIds.length)]
-      const cat = Api.getCatByBreed(breedId)  
-      catArr.push(cat)
-    }
-
-    catArr = await Promise.all(catArr)
-
-    return catArr.map(cat => {
-      cat.price = Math.floor(Math.random() * 10000) / 100 + 10
-      cat.name = faker.name.findName()
-      cat.email = faker.internet.email()
-      cat.job = faker.name.jobTitle()
-      cat.gender = faker.name.gender()
-      cat.music = faker.music.genre()
-      cat.car = faker.fake("{{vehicle.color}} {{vehicle.manufacturer}}, {{vehicle.model}}")
-      cat.image = cat[0]
-      cat.breed = cat[0].breeds[0]
-
-      delete cat[0]
-      delete cat.image.breeds
-
-      return cat
+  const refreshStock = () => {
+    Api.getRandomCats(3, breedIds).then(arr => {
+      if (arr) {
+        setProducts(arr)
+      }
     })
+  }
+
+  const addToBasket = async (id) => {
+    const newBasket = [...basket]
+    const newProducts = [...products]
+
+    const cat = newProducts.find(cat => cat.id === id)
+    cat.inStock = false
+    newBasket.push(cat)
+
+    setBasket(newBasket)
+    setProducts(newProducts)
   }
 
   return (
     <div className="App">
-      <button onClick={() => getCats(1).then(cat => console.log(cat[0]))}>Log a cat to console</button>
+      <Basket items={basket} />
+
+      <Route exact path="/profile">        
+        <Profile/>
+      </Route>
+
+      <Route exact path="/">
+        <div className="py-3 bg-light">
+            <h1 className="d-flex justify-content-center align-items-center">
+              Cats4Lyf&nbsp;<FaCat />
+            </h1> 
+        </div>
+        
+        <ProductList 
+          products={products} 
+          addToBasket={addToBasket} 
+          refreshStock={refreshStock} 
+        />
+      </Route>      
     </div>
   ) 
 }
