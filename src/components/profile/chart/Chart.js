@@ -14,15 +14,15 @@ export const Chart = (props) => {
             value: props.breed.adaptability
         },
         {
-            attribute: 'Affection Level',
+            attribute: 'Affection',
             value: props.breed.affection_level
         },
         {
-            attribute: 'Child Friendliness',
+            attribute: 'Children',
             value: props.breed.child_friendly
         },
         {
-            attribute: 'Dog Friendliness',
+            attribute: 'Dogs',
             value: props.breed.dog_friendly
         },
         {
@@ -50,7 +50,7 @@ export const Chart = (props) => {
             value: props.breed.social_needs
         },
         {
-            attribute: 'Stranger Friendlieness',
+            attribute: 'Strangers',
             value: props.breed.stranger_friendly
         },
         {
@@ -61,7 +61,7 @@ export const Chart = (props) => {
 
     return (
         <ResponsiveContainer width="100%" height={400}>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
             <PolarGrid />
             <PolarAngleAxis dataKey="attribute" />
             <PolarRadiusAxis domain={[0, 5]} />

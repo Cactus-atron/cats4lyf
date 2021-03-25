@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Route } from 'react-router-dom'
+import Card from 'react-bootstrap/Card'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -52,11 +53,13 @@ const App = () => {
       </Route>
 
       <Route exact path="/">
-        <div className="py-3 bg-light">
+        <Card>
+          <Card.Header>
             <h1 className="d-flex justify-content-center align-items-center">
               Cats4Lyf&nbsp;<FaCat />
-            </h1> 
-        </div>
+            </h1>   
+          </Card.Header>
+        </Card>
         
         <ProductList 
           products={products} 

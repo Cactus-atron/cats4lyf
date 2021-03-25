@@ -31,12 +31,14 @@ export const Profile = () => {
                 Back
             </Button>
 
-            <div className="py-3 bg-light">
+            <Card>
+                <Card.Header>
                 <h1 className="text-center">{location.state.name}</h1>
                 <h2 className="text-center">{location.state.job}</h2>    
-            </div>
+                </Card.Header>
+            </Card>
 
-            <Row className="justify-content-around">
+            <Row className="justify-content-around mb-3">
                 <Col xs={11} lg={5} className="mt-4">
                     <Card className="h-100">
                         <Card.Body>
